@@ -1,0 +1,16 @@
+@use '../styles/variables.scss';
+
+.app {
+	position: relative;
+	display: flex;
+    justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 1.5em 3em;
+	width: 96vw;
+	max-width: 500px;
+	min-height: 350px;
+	background-color: variables.$app-background-color;
+	border-radius: 20px;
+	box-shadow: 0 0 10px #32323222;
+}

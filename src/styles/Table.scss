@@ -1,0 +1,36 @@
+@use './variables.scss';
+
+table {
+	margin-bottom: 1em;
+	border-collapse: collapse;
+	border-radius: 10px;
+	border-style: hidden;
+	box-shadow: 0 0 0 1px variables.$white;
+	overflow: hidden;
+	tr,
+	th,
+	td {
+		border: 1px solid variables.$white;
+	}
+	thead {
+		tr {
+			background-color: #33333333;
+		}
+	}
+	tbody {
+		tr {
+			transition: background-color 0.3s;
+			cursor: pointer;
+			&:last-child {
+				border-bottom-left-radius: 15px;
+			}
+		}
+	}
+
+	th,
+	td {
+		white-space: nowrap;
+		padding: 0.5em 1.5em;
+		text-align: center;
+	}
+}
