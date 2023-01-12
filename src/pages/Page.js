@@ -6,6 +6,7 @@ import Form from '../components/Form';
 import ShowAllBtn from '../components/ShowAllBtn';
 import Table from '../components/Table';
 import Pagination from '../components/Pagination';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 import '../styles/Page.scss';
 
@@ -99,12 +100,17 @@ export default function Page({ setActiveModal, setModalData }) {
 					) : (
 						<>
 							<ShowAllBtn setId={setId} setPage={setPage} />
-							<p className='info'>No data for this page/id</p>
+							{!page && <LoadingSpinner />}
+							{!id && <p className='info'>No data for this page/id</p>}
 						</>
 					)}
 				</>
 			) : (
-				<p className='info'>Error {error}!</p>
+				<>
+					<p className='info'>
+						Error {error}! <br /> Try again.
+					</p>
+				</>
 			)}
 		</div>
 	);

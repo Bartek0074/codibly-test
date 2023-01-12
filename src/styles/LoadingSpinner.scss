@@ -1,0 +1,56 @@
+@use './variables';
+
+.loading-spinner {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1em;
+	width: 100%;
+	height: 100%;
+	&__icon {
+		width: 20px;
+		height: 20px;
+		border: solid 3px transparent;
+		border-top-color: variables.$primary-color;
+		border-left-color: variables.$primary-color;
+		border-radius: 50%;
+		animation: loading-circle-animation 800ms linear infinite;
+	}
+}
+
+@keyframes loading-circle-animation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@media (min-width: 576px) {
+	.loading-spinner {
+		&__icon {
+			width: 30px;
+			height: 30px;
+			border-width: 4px;
+		}
+	}
+}
+
+@media (min-width: 768px) {
+	.loading-spinner {
+		&__icon {
+			width: 40px;
+			height: 40px;
+		}
+	}
+}
+
+@media (min-width: 992px) {
+	.loading-spinner {
+		&__icon {
+			width: 45px;
+			height: 45px;
+		}
+	}
+}
