@@ -4,7 +4,7 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 import '../styles/Pagination.scss';
 
-export default function Pagination({ data, page, setPage, perPage }) {
+export default function Pagination({ page, setPage, totalPages }) {
 	return (
 		<div className='pagination'>
 			<button
@@ -22,16 +22,16 @@ export default function Pagination({ data, page, setPage, perPage }) {
 				<IoIosArrowBack className='icon' />
 			</button>
 			<p className='pagination__page'>
-				{page}/{Math.ceil(data?.length / perPage)}
+				{page}/{totalPages}
 			</p>
 			<button
 				className={
-					page < Math.ceil(data?.length / perPage)
+					page < totalPages
 						? 'pagination__button pagination__button--active'
 						: 'pagination__button'
 				}
 				onClick={() => {
-					if (page < Math.ceil(data?.length / perPage)) {
+					if (page < totalPages) {
 						setPage(parseInt(page) + 1);
 					}
 				}}

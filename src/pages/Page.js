@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { fetchData } from '../utils/fetchData';
 
 import Form from '../components/Form';
 import ShowAllBtn from '../components/ShowAllBtn';
@@ -15,6 +15,7 @@ export default function Page({ setActiveModal, setModalData }) {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [id, setId] = useState(searchParams.get('id'));
 	const [page, setPage] = useState(searchParams.get('page'));
+	const [totalPages, setTotalPages] = useState();
 
 	const [data, setData] = useState();
 	const [idArr, setIdArr] = useState();
@@ -37,17 +38,30 @@ export default function Page({ setActiveModal, setModalData }) {
 	}, [id]);
 
 	useEffect(() => {
-		axios
-			.get('https://reqres.in/api/products?per_page=100')
+		fetchData(`page=${page}&per_page=5`)
 			.then((response) => {
-				if (response.status >= 200 && response.status < 300) {
-					setData(response?.data?.data);
-				} else if (response.status >= 300 && response.status < 500) {
-					setError(response.status);
-				}
+				setData(response?.data);
+				setTotalPages(response.total_pages);
 			})
-			.catch((err) => console.log(err));
-	}, []);
+			.catch((err) => {
+				if (err?.response?.status >= 400) setError(err?.response?.status);
+			});
+	}, [page]);
+
+	useEffect(() => {
+		if (id) {
+			fetchData(`id=${id}&per_page=100`)
+				.then((response) => {
+					let newData = [];
+					newData.push(response?.data);
+					setData(newData);
+					setTotalPages(response.total_pages);
+				})
+				.catch((err) => {
+					if (err?.response?.status >= 400) setError(err?.response?.status);
+				});
+		}
+	}, [id]);
 
 	useEffect(() => {
 		let newArr = [];
@@ -63,7 +77,7 @@ export default function Page({ setActiveModal, setModalData }) {
 					{idArr?.includes(parseInt(id)) && (
 						<ShowAllBtn setId={setId} setPage={setPage} />
 					)}
-					{(page > 0 && page < Math.ceil(data?.length / perPage) + 1) ||
+					{(page > 0 && page < totalPages + 1) ||
 					idArr?.includes(parseInt(id)) ? (
 						<>
 							<Table
@@ -76,10 +90,9 @@ export default function Page({ setActiveModal, setModalData }) {
 							/>
 							{page && (
 								<Pagination
-									data={data}
 									page={page}
 									setPage={setPage}
-									perPage={perPage}
+									totalPages={totalPages}
 								/>
 							)}
 						</>
@@ -91,7 +104,7 @@ export default function Page({ setActiveModal, setModalData }) {
 					)}
 				</>
 			) : (
-				<p className='info'>Error {error}! Try again later.</p>
+				<p className='info'>Error {error}!</p>
 			)}
 		</div>
 	);
